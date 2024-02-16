@@ -149,8 +149,8 @@ namespace Xeosha
         {
             var tree = new BinaryTree<CloneableInt>();
 
-            tree.AddRange(new List<CloneableInt> { 5, 3, 7, 2 });
-            tree.Add(1);
+            tree.AddRange(new List<CloneableInt> { 8, 7, 3, 1, 5, 6, 10});
+            tree.Remove(1);
 
             Console.WriteLine("\tКоличество элементов: " + tree.Count);
 
