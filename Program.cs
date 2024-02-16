@@ -3,6 +3,7 @@ using Menu;
 using Lab_10lib;
 using BinarySearchTree;
 using Lab12;
+using System.Collections;
 
 namespace Xeosha
 {
@@ -143,8 +144,23 @@ namespace Xeosha
                 Console.WriteLine("Товар не найден");
             //uiii
         }
+
+        public static void fuction()
+        {
+            var tree = new BinaryTree<CloneableInt>();
+
+            tree.AddRange(new List<CloneableInt> { 5, 3, 7, 2 });
+            tree.Add(1);
+
+            Console.WriteLine("\tКоличество элементов: " + tree.Count);
+
+            tree.PrintTree();
+
+            Console.ReadKey(true);
+        }
         public static void Main()
         {
+            fuction();
             // Компаратор по цене.
             var searchTree = new BinaryTree<Goods>(new CustomComparer());
 
@@ -156,6 +172,8 @@ namespace Xeosha
             dialog.AddOption("Удалить дерево из памяти", () => { searchTree.Clear(); });
             dialog.AddOption("Клон дерева", () => TaskClone(searchTree));
             dialog.Start();
+
+
         }
 
     }
