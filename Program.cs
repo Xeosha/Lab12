@@ -45,12 +45,6 @@ namespace Xeosha
         static Goods GetMenuTypeProducts(int position)
         {
             var goods = new Goods();
-            var dialog = new Dialog($"Выберите тип товара для {position} позиции. Если создали, нажмите ESC. Если не выберите - рандом.");
-            dialog.AddOption("Базовый класс (Товар)", () => { goods = new Goods(); goods.Init(); dialog.Close(); });
-            dialog.AddOption("Игрушка", () => { goods = new Toy(); goods.Init(); dialog.Close(); });
-            dialog.AddOption("Продукт", () => { goods = new Product(); goods.Init(); dialog.Close(); });
-            dialog.AddOption("Молочный продукт", () => { goods = new MilkProduct(); goods.Init(); dialog.Close(); });
-            dialog.Start();
 
             Console.WriteLine("Созданный товар:\n" + goods);
             Console.WriteLine("\nНажмите любую клавишу для продолжения...");
@@ -64,10 +58,7 @@ namespace Xeosha
             int size = EnterKeybord.TypeInteger("Введите размер массива: ", 0);
             Goods[] products = new Goods[size];
             for (int i = 0; i < size; i++)
-            {
                 products[i] = GetMenuTypeProducts(i + 1);
-
-            }
 
             return products;
         }
@@ -97,17 +88,28 @@ namespace Xeosha
                 var products = GenerateRandomGoodsArray(5);
                 tree = new BinaryTree<Goods>(products, new CustomComparer());
             }
+            tree.Add(new Goods("1", 1, 1));
 
-            Console.WriteLine("\tИзначальное дерево: ");
+
+            Console.WriteLine("\n>>\tИзначальное дерево: ");
             tree.PrintTree();
-            foreach (var item in tree)
-                Console.WriteLine(item);
 
-            Console.WriteLine("\tПоверхностное копирование дерева: ");
-            ((BinaryTree<Goods>)tree.ShallowCopy()).PrintTree();
+            Console.WriteLine("\n>>\tПоверхностное копирование дерева: ");
+            var treeCLone = ((BinaryTree<Goods>)tree.ShallowCopy());
+            treeCLone.PrintTree();
+             
+            Console.WriteLine("\n>>\tГлубокое копирование дерева: ");
+            var treeShallow = ((BinaryTree<Goods>)tree.Clone());
+            treeShallow.PrintTree();
 
-            Console.WriteLine("\tГлубокое копирование дерева: ");
-            ((BinaryTree<Goods>)tree.Clone()).PrintTree();
+            Console.WriteLine("Удаление обьекта 1 1 1");
+            tree.Remove(new Goods("1", 1, 1));
+
+            Console.WriteLine("\n>>\tПоверхностное копирование дерева: ");
+            treeCLone.PrintTree();
+
+            Console.WriteLine("\n>>\tГлубокое копирование дерева: ");
+            treeShallow.PrintTree();
         }
 
         static void ShowTree(BinaryTree<Goods> tree)
@@ -123,13 +125,14 @@ namespace Xeosha
 
             Console.WriteLine("\tIEnumerable:");
             foreach (var item in tree)
-                Console.WriteLine(item + "\n---");
+                Console.WriteLine(item + "\n");
         }
 
         static void DeleteItemTree(BinaryTree<Goods> tree)
         {
             foreach (var item in CreateArray())
                 tree.Remove(item);
+
         }
 
         static void FindItem(BinaryTree<Goods> tree)
@@ -145,22 +148,19 @@ namespace Xeosha
             //uiii
         }
 
-        public static void fuction()
-        {
-            var tree = new BinaryTree<CloneableInt>();
+        //static void fun()
+        //{
+        //    var tree = new BinaryTree<CloneableInt>(new List<CloneableInt>{9, 5, 4, 8, 6, 7 });
+        //    tree.PrintTree();
+        //    tree.Remove(5);
+        //    tree.PrintTree(); 
 
-            tree.AddRange(new List<CloneableInt> { 8, 7, 3, 1, 5, 6, 10});
-            tree.Remove(1);
+        //    Console.ReadKey(true);
+        //}
 
-            Console.WriteLine("\tКоличество элементов: " + tree.Count);
-
-            tree.PrintTree();
-
-            Console.ReadKey(true);
-        }
         public static void Main()
         {
-            fuction();
+            //fun();
             // Компаратор по цене.
             var searchTree = new BinaryTree<Goods>(new CustomComparer());
 
