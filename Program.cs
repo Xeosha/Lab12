@@ -4,6 +4,7 @@ using Lab_10lib;
 using BinarySearchTree;
 using Lab12;
 using System.Collections;
+using System.Security.Cryptography;
 
 namespace Xeosha
 {
@@ -42,23 +43,17 @@ namespace Xeosha
         }
 
 
-        static Goods GetMenuTypeProducts(int position)
-        {
-            var goods = new Goods();
-
-            Console.WriteLine("Созданный товар:\n" + goods);
-            Console.WriteLine("\nНажмите любую клавишу для продолжения...");
-            Console.ReadKey(true);
-
-            return goods;
-        }
 
         static Goods[] CreateKeyboardGoodsArray()
         {
             int size = EnterKeybord.TypeInteger("Введите размер массива: ", 0);
             Goods[] products = new Goods[size];
             for (int i = 0; i < size; i++)
-                products[i] = GetMenuTypeProducts(i + 1);
+            {
+                Console.WriteLine($"\n\t>> Создание {i} товара: ");
+                products[i] = new Goods();
+                products[i].Init();
+            }
 
             return products;
         }
@@ -67,17 +62,27 @@ namespace Xeosha
             Goods[] goods = Array.Empty<Goods>();
 
             var dialog = new Dialog("Создание массива товаров");
-            dialog.AddOption("Рандомное создание", () => { goods = CreateRandomGoodsArray(); dialog.Close("Список товаров создан."); });
-            dialog.AddOption("Создание с клавиатуры", () => { goods = CreateKeyboardGoodsArray(); dialog.Close("Список товаров создан."); }, true);
+            dialog.AddOption("Рандомное создание", () => { goods = CreateRandomGoodsArray(); dialog.Close(GetStringProducts(goods)); });
+            dialog.AddOption("Создание с клавиатуры", () => { goods = CreateKeyboardGoodsArray(); dialog.Close(GetStringProducts(goods)); }, true);
             dialog.Start();
 
             return goods;
         }
 
+        public static string GetStringProducts(Goods[] products, string message = "Товары в массиве:")
+        {
+            var result = "\t" + message + "\n";
+            foreach (Goods product in products)
+                result += product + "\n";
+            return result;
+
+        }      
 
         public static void AddProductInTree(BinaryTree<Goods> tree)
         {
-            tree.AddRange(CreateArray());
+            var products = CreateArray();
+
+            tree.AddRange(products);
         }
 
 
@@ -125,7 +130,7 @@ namespace Xeosha
 
             Console.WriteLine("\tIEnumerable:");
             foreach (var item in tree)
-                Console.WriteLine(item + "\n");
+                Console.WriteLine(item);
         }
 
         static void DeleteItemTree(BinaryTree<Goods> tree)
@@ -137,7 +142,9 @@ namespace Xeosha
 
         static void FindItem(BinaryTree<Goods> tree)
         {
-            var product = GetMenuTypeProducts(0);
+            var product = new Goods();
+            product.Init();
+
             var findProduct = tree.Find(product);
             Console.Clear();
             Console.WriteLine("\tНайденный продукт: ");
